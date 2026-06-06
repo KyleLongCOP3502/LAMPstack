@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Pentadeck  -  Meet the Group 15 development team.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'><polygon points='14,2 15.1,8.9 18.9,3 17.1,9.8 22.9,6 18.5,11.4 25.4,10.3 19.2,13.5 25.9,15.3 18.9,15.6 24.4,20 17.9,17.5 21.1,23.7 16.1,18.8 16.5,25.7 14,19.2 11.5,25.7 11.9,18.8 6.9,23.7 10.1,17.5 3.6,20 9.1,15.6 2.1,15.3 8.8,13.5 2.6,10.3 9.5,11.4 5.1,6 10.9,9.8 9.1,3 12.9,8.9' fill='%23F5C518'/></svg>">
+  <title>Pentadeck  -  Team</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/md5.js" defer></script>
+  <script src="js/code.js" defer></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      readCookie();
+      /* Each member gets an explicit shape + hue so they all look distinct */
+      document.querySelectorAll('.m-shape-slot').forEach(function(el) {
+        const fn    = el.dataset.fn;
+        const ln    = el.dataset.ln;
+        const shape = el.dataset.shape;
+        const hue   = parseInt(el.dataset.hue, 10);
+        const size  = 68;
+        const init  = ((fn[0]||'') + (ln[0]||'')).toUpperCase();
+        const fill  = 'hsla('+hue+',68%,52%,.24)';
+        const str   = 'hsl('+hue+',80%,65%)';
+        const tc    = 'hsl('+hue+',85%,78%)';
+        const svgEl = _svgEl(shape);
+        el.innerHTML =
+          '<svg width="'+size+'" height="'+size+'" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' +
+          '<g fill="'+fill+'" stroke="'+str+'" stroke-width="3.5" stroke-linejoin="round">'+svgEl+'</g>' +
+          '<text x="50" y="50" text-anchor="middle" dominant-baseline="central" '+
+          'font-family="Syne,sans-serif" font-weight="700" font-size="28" fill="'+tc+'">'+init+'</text>' +
+          '</svg>';
+      });
+    });
+  </script>
+</head>
+<body class="app-members">
+
+  <aside class="sidebar">
+    <div class="sb-top">
+      <div class="sb-brand">
+        <!-- 15-pointed star logo -->
+        <svg width="30" height="30" viewBox="0 0 28 28" style="flex-shrink:0">
+          <polygon points="14.0,2.0 15.1,8.9 18.9,3.0 17.1,9.8 22.9,6.0 18.5,11.4 25.4,10.3 19.2,13.5 25.9,15.3 18.9,15.6 24.4,20.0 17.9,17.5 21.1,23.7 16.1,18.8 16.5,25.7 14.0,19.2 11.5,25.7 11.9,18.8 6.9,23.7 10.1,17.5 3.6,20.0 9.1,15.6 2.1,15.3 8.8,13.5 2.6,10.3 9.5,11.4 5.1,6.0 10.9,9.8 9.1,3.0 12.9,8.9"
+            fill="rgba(245,197,24,0.18)" stroke="#F5C518" stroke-width="1.5" stroke-linejoin="round"/>
+        </svg>
+        <div>
+          <div class="sb-xv">Pentadeck</div>
+          <div class="sb-sub">Group&nbsp;15&nbsp;·&nbsp;Contacts</div>
+        </div>
+      </div>
+      <nav class="sb-nav" aria-label="Main navigation">
+        <a href="contacts.html" class="nav-a">
+          <span class="nav-icon"><svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15"><path d="M10 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-4 0-7 2-7 4v1h14v-1c0-2-3-4-7-4z"/></svg></span>Contacts
+        </a>
+        <a href="members.html" class="nav-a on">
+          <span class="nav-icon"><svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15"><path d="M7 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm5-1a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM7 11c-3 0-6 1.5-6 3.5V16h12v-1.5c0-2-3-3.5-6-3.5zm5 .5c-.5 0-1 .1-1.4.2A5 5 0 0 1 12 15v1h5v-1.5c0-1.8-2-3-5-3z"/></svg></span>Team
+        </a>
+      </nav>
+    </div>
+    <div class="sb-mid"></div>
+    <div class="sb-bot">
+      <div class="sb-user">Signed in as <span id="userName"></span></div>
+      <button class="btn btn-xs btn-xs-g" onclick="doLogout()">Sign Out</button>
+    </div>
+  </aside>
+
+  <main class="main-members">
+    <div class="main-heading">Team · Group 15</div>
+
+    <div class="members-grid">
+
+      <!-- pentagon (green) -->
+      <div class="m-card">
+        <div class="m-shape-slot" data-fn="Alejandro" data-ln="Rivera"
+             data-shape="pentagon" data-hue="130"></div>
+        <div class="m-name">Alejandro Rivera</div>
+        <div class="m-role">Authentication</div>
+      </div>
+
+      <!-- octagon (blue) -->
+      <div class="m-card">
+        <div class="m-shape-slot" data-fn="Kyle" data-ln="Long"
+             data-shape="octagon" data-hue="205"></div>
+        <div class="m-name">Kyle Long</div>
+        <div class="m-role">Contact API</div>
+      </div>
+
+      <!-- star5 (amber/gold) -->
+      <div class="m-card">
+        <div class="m-shape-slot" data-fn="Isaac" data-ln="Joseph"
+             data-shape="star5" data-hue="48"></div>
+        <div class="m-name">Isaac Joseph</div>
+        <div class="m-role">Search &amp; Edit</div>
+      </div>
+
+      <!-- house (purple) -->
+      <div class="m-card">
+        <div class="m-shape-slot" data-fn="Jonathan" data-ln="Steineich"
+             data-shape="house" data-hue="285"></div>
+        <div class="m-name">Jonathan Steineich</div>
+        <div class="m-role">Frontend / UI</div>
+      </div>
+
+      <!-- diamond (red) -->
+      <div class="m-card">
+        <div class="m-shape-slot" data-fn="Jacob" data-ln="Scott"
+             data-shape="diamond" data-hue="355"></div>
+        <div class="m-name">Jacob Scott</div>
+        <div class="m-role">Testing</div>
+      </div>
+
+    </div>
+  </main>
+
+</body>
+</html>

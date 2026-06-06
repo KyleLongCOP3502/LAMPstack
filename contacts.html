@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Pentadeck  -  Manage your personal contacts with an interactive physics-based interface.">
+  <title>Pentadeck  -  Contacts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'><polygon points='14,2 15.1,8.9 18.9,3 17.1,9.8 22.9,6 18.5,11.4 25.4,10.3 19.2,13.5 25.9,15.3 18.9,15.6 24.4,20 17.9,17.5 21.1,23.7 16.1,18.8 16.5,25.7 14,19.2 11.5,25.7 11.9,18.8 6.9,23.7 10.1,17.5 3.6,20 9.1,15.6 2.1,15.3 8.8,13.5 2.6,10.3 9.5,11.4 5.1,6 10.9,9.8 9.1,3 12.9,8.9' fill='%23F5C518'/></svg>">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+  <script src="js/md5.js"     defer></script>
+  <script src="js/code.js"    defer></script>
+  <script src="js/physics.js" defer></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      readCookie();
+      PhysicsLayer.init();
+      doSearch();
+      loadPhysics();
+      updateAddForm();
+    });
+  </script>
+</head>
+<body>
+
+  <main id="mainCanvas">
+  <canvas id="physicsCanvas"
+          role="img"
+          aria-label="Interactive contact shapes  -  drag shapes into the filter zone to filter your directory"></canvas>
+
+  <aside class="sidebar" aria-label="Contact manager sidebar">
+
+    <!-- Brand -->
+    <div class="sb-top">
+      <div class="sb-brand">
+        <svg width="30" height="30" viewBox="0 0 28 28" style="flex-shrink:0" aria-hidden="true">
+          <polygon points="14.0,2.0 15.1,8.9 18.9,3.0 17.1,9.8 22.9,6.0 18.5,11.4 25.4,10.3 19.2,13.5 25.9,15.3 18.9,15.6 24.4,20.0 17.9,17.5 21.1,23.7 16.1,18.8 16.5,25.7 14.0,19.2 11.5,25.7 11.9,18.8 6.9,23.7 10.1,17.5 3.6,20.0 9.1,15.6 2.1,15.3 8.8,13.5 2.6,10.3 9.5,11.4 5.1,6.0 10.9,9.8 9.1,3.0 12.9,8.9"
+            fill="rgba(245,197,24,0.18)" stroke="#F5C518" stroke-width="1.5" stroke-linejoin="round"/>
+        </svg>
+        <div>
+          <div class="sb-xv">Pentadeck</div>
+          <div class="sb-sub">Group&nbsp;15&nbsp;·&nbsp;Contacts</div>
+        </div>
+      </div>
+      <nav class="sb-nav" aria-label="Main navigation">
+        <a href="contacts.html" class="nav-a on" aria-current="page">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15"><path d="M10 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-4 0-7 2-7 4v1h14v-1c0-2-3-4-7-4z"/></svg>
+          </span>
+          Contacts
+        </a>
+        <a href="members.html" class="nav-a">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15"><path d="M7 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm5-1a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM7 11c-3 0-6 1.5-6 3.5V16h12v-1.5c0-2-3-3.5-6-3.5zm5 .5c-.5 0-1 .1-1.4.2A5 5 0 0 1 12 15v1h5v-1.5c0-1.8-2-3-5-3z"/></svg>
+          </span>
+          Team
+        </a>
+      </nav>
+    </div>
+
+    <div class="sb-mid">
+
+      <!-- NEW CONTACT -->
+      <div class="sb-section">
+        <div class="sb-section-head" onclick="toggleSection(this)"
+             role="button" tabindex="0" aria-expanded="true"
+             onkeydown="if(event.key==='Enter'||event.key===' ')toggleSection(this)">
+          <span class="sb-section-label">New Contact</span>
+          <span class="sb-toggle" aria-hidden="true">▾</span>
+        </div>
+        <div class="sb-section-content">
+          <div class="sb-section-body">
+            <input class="field" type="text"  id="addFirstName" placeholder="First Name"
+                   aria-label="First name" oninput="onAddInput('fn')" autocomplete="given-name"/>
+            <div id="addLastNameWrap" style="display:none">
+              <input class="field" type="text"  id="addLastName" placeholder="Last Name"
+                     aria-label="Last name" oninput="onAddInput('ln')" autocomplete="family-name"/>
+            </div>
+            <div id="addPhoneWrap" style="display:none">
+              <input class="field" type="text"  id="addPhone" placeholder="Phone"
+                     aria-label="Phone number" oninput="onAddInput('ph')" autocomplete="tel"/>
+            </div>
+            <div id="addEmailWrap" style="display:none">
+              <input class="field" type="email" id="addEmail" placeholder="Email"
+                     aria-label="Email address" oninput="onAddInput('em')" autocomplete="email"/>
+            </div>
+            <div class="form-foot">
+              <button class="btn btn-y btn-xs" id="addBtn"
+                      onclick="doAddContact()" disabled>Add Contact</button>
+              <span id="addResult" role="alert" aria-live="polite"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sb-divider"></div>
+
+      <!-- DIRECTORY -->
+      <div class="sb-section">
+        <div class="sb-section-head" id="dirHead" onclick="toggleSection(this)"
+             role="button" tabindex="0" aria-expanded="true"
+             onkeydown="if(event.key==='Enter'||event.key===' ')toggleSection(this)">
+          <span class="sb-section-label">Directory</span>
+          <span class="sb-section-hint" id="dirHint" aria-live="polite">drag shapes to zone ↓</span>
+          <span class="sb-toggle" aria-hidden="true">▾</span>
+        </div>
+        <div class="sb-section-content">
+          <div class="sb-section-body">
+            <div class="search-row">
+              <input class="field" type="search" id="searchName"
+                     placeholder="Search by first name…"
+                     aria-label="Search contacts by first name"
+                     oninput="doSearch()" />
+              <button class="btn btn-xs btn-xs-y" onclick="doSearch()"
+                      aria-label="Search">↵</button>
+            </div>
+            <div id="searchResults">
+              <div class="empty">Loading…</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EDIT PANEL -->
+      <div id="editDiv" role="form" aria-label="Edit contact">
+        <div class="edit-lbl">Editing Contact</div>
+        <input class="field" type="text"  id="editFirstName" placeholder="First Name" aria-label="First name"/>
+        <input class="field" type="text"  id="editLastName"  placeholder="Last Name"  aria-label="Last name"/>
+        <input class="field" type="text"  id="editPhone"     placeholder="Phone"      aria-label="Phone number"/>
+        <input class="field" type="email" id="editEmail"     placeholder="Email"      aria-label="Email address"/>
+        <div class="edit-foot">
+          <button class="btn btn-y btn-xs" onclick="doUpdate()">Save</button>
+          <button class="btn btn-xs btn-xs-g" onclick="cancelEdit()">Cancel</button>
+          <span id="editResult" role="alert" aria-live="polite"></span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="sb-bot">
+      <div class="sb-user">Signed in as <span id="userName"></span></div>
+      <button class="btn btn-xs btn-xs-g" onclick="doLogout()">Sign Out</button>
+    </div>
+
+  </aside>
+
+</body>
+</html>

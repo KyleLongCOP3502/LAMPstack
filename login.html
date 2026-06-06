@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Pentadeck  -  Sign in or create an account to manage your personal contacts.">
+  <title>Pentadeck  -  Sign In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'><polygon points='14,2 15.1,8.9 18.9,3 17.1,9.8 22.9,6 18.5,11.4 25.4,10.3 19.2,13.5 25.9,15.3 18.9,15.6 24.4,20 17.9,17.5 21.1,23.7 16.1,18.8 16.5,25.7 14,19.2 11.5,25.7 11.9,18.8 6.9,23.7 10.1,17.5 3.6,20 9.1,15.6 2.1,15.3 8.8,13.5 2.6,10.3 9.5,11.4 5.1,6 10.9,9.8 9.1,3 12.9,8.9' fill='%23F5C518'/></svg>">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/md5.js" defer></script>
+  <script src="js/code.js" defer></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      if (localStorage.getItem('startTab') === 'reg') {
+        localStorage.removeItem('startTab');
+        switchTab('reg');
+      }
+    });
+  </script>
+</head>
+<body class="auth-page">
+  <main>
+  <div class="auth-wrap">
+    <div>
+      <div class="auth-xv">Pentadeck<span class="auth-cur"></span></div>
+      <div class="auth-xv-sub">Group 15 &nbsp;·&nbsp; Contact Manager</div>
+    </div>
+    <div class="auth-card">
+      <div class="scan"></div>
+      <div class="tabs" role="tablist">
+        <button class="tab active" id="tabLogin" role="tab" aria-selected="true"  aria-controls="loginPanel" onclick="switchTab('login')">Sign In</button>
+        <button class="tab"        id="tabReg"   role="tab" aria-selected="false" aria-controls="regPanel"   onclick="switchTab('reg')">Register</button>
+      </div>
+
+      <!-- SIGN IN -->
+      <div class="panel" id="loginPanel" role="tabpanel">
+        <input class="field" type="text"     id="loginName"     placeholder="Username"
+               aria-label="Username"
+               autocomplete="username"
+               onkeydown="if(event.key==='Enter')doLogin()"/>
+        <input class="field" type="password" id="loginPassword" placeholder="Password"
+               aria-label="Password"
+               autocomplete="current-password"
+               onkeydown="if(event.key==='Enter')doLogin()"/>
+        <button class="btn btn-y w100" onclick="doLogin()">Sign In</button>
+        <span id="loginResult" role="alert" aria-live="polite"></span>
+      </div>
+
+      <!-- REGISTER -->
+      <div class="panel hidden" id="regPanel" role="tabpanel">
+        <input class="field" type="text"     id="regFirstName" placeholder="First Name"
+               aria-label="First name"
+               autocomplete="given-name"/>
+        <input class="field" type="text"     id="regLastName"  placeholder="Last Name"
+               aria-label="Last name"
+               autocomplete="family-name"/>
+        <input class="field" type="text"     id="regLogin"     placeholder="Username"
+               aria-label="Username"
+               autocomplete="username"/>
+        <input class="field" type="password" id="regPassword"  placeholder="Password"
+               aria-label="Password"
+               autocomplete="new-password"
+               oninput="checkPwStrength()"
+               onkeydown="if(event.key==='Enter')doRegister()"/>
+
+        <!-- Live password requirements  -  no emojis, clean dot indicators -->
+        <div class="pw-rules" id="pwRules" aria-live="polite" aria-label="Password requirements">
+          <div class="pw-rule" id="ruleLen">8 to 32 characters</div>
+          <div class="pw-rule" id="ruleLetter">At least one letter</div>
+          <div class="pw-rule" id="ruleNumber">At least one number</div>
+          <div class="pw-rule" id="ruleSpecial">At least one special character</div>
+        </div>
+
+        <button class="btn btn-y w100" onclick="doRegister()">Create Account</button>
+        <span id="regResult" role="alert" aria-live="polite"></span>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>
